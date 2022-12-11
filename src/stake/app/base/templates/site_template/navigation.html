@@ -1,0 +1,96 @@
+<header class="page-header">
+    <div  class="navbar">
+        <ul class="nav navbar-nav navbar-right pull-right">
+            <!--
+
+                <li class="visible-phone-landscape">
+                    <a href="#" id="search-toggle">
+                        <i class="fa fa-search"></i>
+                    </a>
+                </li>
+            -->
+            <li data-toggle="tooltip" title="Dashboard" id="navbar-hidden-li" class="navbar-hidden-li">
+                <a href="/"><i class="fa fa-dashboard"></i></a></li>
+            </li>
+            <li data-toggle="tooltip" title="System Info" id="navbar-hidden-li" class="navbar-hidden-li">
+                <a href="/raspberry"><i class="fa fa-hdd-o"></i></a></li>
+            </li>
+            <li data-toggle="tooltip" title="Devices" id="navbar-hidden-li" class="navbar-hidden-li">
+                <a href="/devices"><i class="fa fa-list-alt"></i> </a></li>
+            </li>
+            <li data-toggle="tooltip" title="Traffic" id="navbar-hidden-li" class="navbar-hidden-li">
+                <a href="/traffic"><i class="fa fa-table"></i> </a></li>
+            </li>
+            <li data-toggle="tooltip" title="Plug-ins" id="navbar-hidden-li" class="navbar-hidden-li">
+                <a href="/plugins"><i class="fa fa-magic"></i> </a></li>
+            </li>
+            <li class="dropdown">
+                <a href="#" title="Alerts"
+                class="dropdown-toggle"
+                data-toggle="dropdown">
+                    <i class="fa fa-bell"></i>
+                    <!--<span class="count">8</span>-->
+                </a>
+                <ul id="alert_nav" class="dropdown-menu support" role="menu">
+                    <li role="presentation">
+                        <span class="text-align-center see-all">
+                            Loading alerts...
+                            <i class="fa fa-circle-o-notch fa-spin"></i>
+                        </span>
+                    </li>
+                </ul>
+            </li>
+            <li class="divider"></li>
+            <li class="hidden-xs">
+                <a href="#" id="settings"
+                title="View Settings"
+                data-toggle="popover"
+                data-placement="bottom">
+                    <i id="hidden-eye" class="glyphicon glyphicon-eye-open"></i>
+                </a>
+            </li>
+            <li class="hidden-xs dropdown">
+                <a href="#" title="Account Settings" id="account"
+                class="dropdown-toggle"
+                data-toggle="dropdown">
+                    <i class="glyphicon glyphicon-user"></i>
+                </a>
+                <ul id="account-menu" class="dropdown-menu account" role="menu">
+                    <li role="presentation" class="account-picture">
+                        <img src="/static/assets/img/user.png" alt="">
+                        
+                        {{ current_user.username }}
+                    </li>
+                    <li role="presentation">
+                        <a href="/profile" class="link">
+                            <i class="fa fa-user"></i>
+                            Profile Settings
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="visible-xs">
+                <a href="#"
+                class="btn-navbar"
+                data-toggle="collapse"
+                data-target=".sidebar"
+                title="">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </li>
+            <li data-toggle="tooltip" title="Log off" class="hidden-xs">
+              <a href={{ url_for('base_blueprint.logout') }} ><i class="glyphicon glyphicon-off"></i></a></li>
+        </ul>
+        <!--
+        <form id="search-form" class="navbar-form pull-right" role="search">
+            <input type="search" class="form-control search-query" placeholder="Search...">
+        </form>
+    -->
+        <div class="notifications pull-right">
+            <div class="alert pull-right">
+                <a href="#" class="close ml-xs" data-dismiss="alert">&times;</a>
+                <i class="fa fa-info-circle mr-xs"></i> Welcome to <a id="notification-link" href="#">STAKE</a>! Check the view settings on the right!
+            </div>
+        </div>
+    </div>
+</header>  

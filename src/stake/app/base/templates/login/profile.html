@@ -1,0 +1,95 @@
+{% extends "base-site.html" %}
+{% block title %} Profile {% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+{% block content %}
+<h2 class="page-title"><i class="glyphicon glyphicon-user"></i> Profile Settings - <small>Edit your profile information</small></h2>
+<div class="row">
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-8">
+        <section class="widget">
+            <header>
+                <p >
+                <h1 class="lead">
+                    <img src="/static/assets/img/user.png" height="100" width="100" alt="">
+                    
+                    {{ current_user.username }}
+                </h1>
+                </p>
+                <p>
+                    {% if msg %}
+                        <h3 align="center" style="color:{{ color }};">
+                        {{ msg | safe }}
+                        </h3>
+                    {% else %}
+                            
+                    {% endif %} 
+                </p>
+            </header>
+            <div class="widget-body">
+                <div class="widget-padding-md border rounded">
+                    <form role="form" method="post" action="">
+                        {{ form.hidden_tag() }} 
+                        <fieldset>                            
+                            <div class="form-group">
+                                <label for="email" >Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-envelope"></i>
+                                    </span>
+                                    {{ form.email(value=current_user.email, placeholder="Email", class="form-control input-md input-transparent") }}
+                                </div>
+                            </div>
+                                <button type="submit" name="update_email" class="btn btn-md btn-danger">
+                                    <span class="small-circle"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    <small>Update Email</small>
+                                </button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+            <div class="widget-body">
+                <div class="widget-padding-md border rounded">
+                     <form role="form" method="post" action="">
+                         {{ form.hidden_tag() }} 
+                        <fieldset>                            
+                            <div class="form-group">
+                                <label for="old_password" >Password</label>
+                                <div class="input-group input-group-md">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-lock"></i>
+                                    </span>
+                                    {{ form.old_password(placeholder="Current Password", class="form-control input-md input-transparent", type="password") }}
+                                </div>
+                            </div>
+                            <div class="form-group">   
+                                <label for="new_password" >New Password</label>
+                                <div class="input-group input-group-md">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-lock"></i>
+                                    </span>
+                                    {{ form.new_password(placeholder="New Password", class="form-control input-md input-transparent", type="password") }}
+                                </div>
+                                <label  ></label>
+                                <div class="input-group input-group-md">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-lock"></i>
+                                    </span>
+                                    {{ form.verify_new_password(placeholder="Verify New Password", class="form-control input-md input-transparent", type="password") }}
+                                </div>
+                            </div>
+                        </fieldset>
+                            <button type="submit" name="update_password" class="btn btn-md btn-danger">
+                                <span class="small-circle"><i class="glyphicon glyphicon-pencil"></i></span>
+                                <small>Update Password</small>
+                            </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

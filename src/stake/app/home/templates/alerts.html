@@ -1,0 +1,120 @@
+{% extends "base-site.html" %}
+{% block title %} Alerts {% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="/static/assets/DataTables/datatables.min.css"/>
+{% endblock stylesheets %}
+{% block content %}
+<h2 class="page-title"><i class="fa fa-bell"></i> Alerts - <small>Colors of new alerts <span class="fw-semi-bold">not</span> updated in real-time</small></h2>
+<div class="row">
+    <div class="col-md-18">
+        <section class="widget">
+            <header>
+            </header>
+            <div class="body" id="table">
+                <table id="alerttable" class="dataframe table table-hover dataTable no-footer" >
+                    <thead>
+                        <tr>
+                            {% for c in columns %}
+                                <th>{{c}}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for k, v in table %}
+                        {% if v.ALERT_TYPE == 'anomaly' %}
+                            <tr style="background:#a84343;"> 
+                        {% else %}
+                            <tr> 
+                        {% endif %}
+                                <td>{{v.TIMESTAMP}}</td>
+
+                                {% if v.CONTEXT == 'Plugins' %}
+                                    <td ><a href="/plugins">
+                                        <span class="fw-semi-bold">Plug-ins</span>
+                                    </a></td>
+                                {% else %}
+                                    {% if v.CONTEXT == 'Traffic' %}
+                                        <td ><a href="/traffic">
+                                            <span class="fw-semi-bold">{{v.CONTEXT}}</span>
+                                        </a></td>
+                                        {% else %}
+                                            {% if v.CONTEXT == 'Devices' %}
+                                                <td ><a href="/devices">
+                                                    <span class="fw-semi-bold">{{v.CONTEXT}}</span>
+                                                </a></td>
+                                            {% else %}
+                                                {% if v.CONTEXT == 'System' %}
+                                                    <td ><a href="/raspberry">
+                                                        <span class="fw-semi-bold">{{v.CONTEXT}}</span>
+                                                    </a></td>
+                                                {% else %}
+                                                    <td><span class="fw-semi-bold">{{v.CONTEXT}}</span></td>
+                                                {% endif %}
+                                            {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                                {% if v.ALERT_TYPE == 'info' %}
+                                    <td style="color: #33cccc; ">
+                                        <span class="fw-semi-bold">{{v.ALERT_TYPE}}</span>
+                                    </td>
+                                {% else %}
+                                    {% if v.ALERT_TYPE == 'error' %}
+                                        <td style="color: #ff5050; ">
+                                            <span class="fw-semi-bold">{{v.ALERT_TYPE}}</span>
+                                        </td>
+                                        {% else %}
+                                            {% if v.ALERT_TYPE == 'success' %}
+                                                <td style="color: #33cc33; ">
+                                                    <span class="fw-semi-bold">{{v.ALERT_TYPE}}</span>
+                                                </td>
+                                            {% else %}
+                                                {% if v.ALERT_TYPE == 'anomaly' %}
+                                                    <td style="color: white; ">
+                                                        <span class="fw-semi-bold">{{v.ALERT_TYPE}}</span>
+                                                    </td>
+                                                {% else %}
+                                                    <td>
+                                                        <span class="fw-semi-bold">{{v.ALERT_TYPE}}</span>
+                                                    </td>
+                                                {% endif %}
+                                            {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                                <td>{{v.TITLE}}</td>
+                                <td>{{v.SHORT_DESCRIPTION}}</td>
+                                <td>{{v.DESCRIPTION}}</td>
+                            </tr>
+                    {% endfor %}
+                    </tbody>      
+                </table> 
+                <!--
+                    {% if table %}
+                        {{ table | safe }}
+                    {% else %}
+                    
+                    {% endif %} 
+                -->
+            </div>
+        </section>
+    </div>    
+</div>
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<!-- alert specific libs -->
+<script src="/static/assets/lib/messenger/build/js/messenger.js"></script>
+<script src="/static/assets/lib/messenger/build/js/messenger-theme-flat.js"></script>
+<!-- other alert libs -->
+<script src="/static/assets/lib/backbone/backbone.js"></script>
+<script src="/static/assets/lib/messenger/docs/welcome/javascripts/location-sel.js"></script>
+<!-- SocketIO: alert-->
+<script src="/static/assets/socket.io/dist/socket.io.js"> </script>
+<!-- Alerts-->
+<script src="/static/assets/js/alerts.js"></script>
+
+<!-- Alert table-->
+<script src="/static/assets/js/alerts-page.js"></script>
+<!-- DataTable-->
+<script type="text/javascript" src="/static/assets/DataTables/datatables.min.js"></script>
+{% endblock javascripts %}

@@ -1,0 +1,104 @@
+[Packet Capture] [To Slow]
+Scapy -> Python Packages:
+	Development library for libpcap:	[NEEDED-Web]
+		$sudo apt-get install libpcap-dev
+
+	Scapy is a Python program that enables the user to send, sniff and dissect and forge network packets: [NEEDED-Web]
+		$sudo python3 -m pip install scapy
+		
+	DPKT: Fast, simple packet creation / parsing, with definitions for the basic TCP/IP protocols:	[NEEDED-Web]
+		$sudo apt-get install python3-dpkt
+____
+[Machine Learning]
+	Pandas:
+		$sudo python3 -m pip install pandas		[NEEDED-Web]
+	Numpy:
+		$sudo python3 -m pip install numpy
+	Sklearn:
+		$sudo python3 -m pip install sklearn	[NEEDED-Web]
+	Imblearn
+		$sudo python3 -m pip install imblearn   [NEEDED-WEB]	
+____
+[Plot]
+	Seaborn:
+		$sudo python3 -m pip install seaborn	[NEEDED-Web]
+____
+[Web App] [Conf. = Confirm if needed]
+	Flask: (Web App)
+		$sudo apt-get install python3-flask
+		
+	Flask-Login: (Web App - Login mechanism)	[NEEDED-Web]
+		$sudo python3 -m pip install flask-login
+
+	Flask-WTF: (Flask Forms) (Also installs WTForms) -> Install Manually!		[NEEDED-Web]
+		$sudo git clone git://github.com/lepture/flask-wtf.git
+		$sudo python3 setup.py install
+			Not:
+			$sudo python3 -m pip install Flask-WTF
+
+	Flask-Session: (Flask Session)
+		$sudo python3 -m pip install flask-session
+	
+	Flask-SqlAlchemy: (Flask SQL)
+		$sudo python3 -m pip install flask-sqlalchemy
+
+	Flask-SocketIO: (Real-time update-Sockets)	[NEEDED-Web]
+		$sudo python3 -m pip install flask-socketio
+
+____
+[Conf.]	Flask-Migrate: (Flask Migrate)		[NEEDED-Web]
+		$sudo python3 -m pip install flask-migrate	
+
+	PostgreSQL: (SQL)						[NEEDED-Web]
+		$sudo apt install postgresql postgresql-contrib
+
+	Psycopg2: (Connect to Python -> PostgreSQL)				[NEEDED-Web]
+		$sudo apt-get install libpq-dev python-dev
+		$sudo python3 -m pip install psycopg2 
+
+	Socket-io: (Real-time data update)						[Already done on repository]
+		# download https://github.com/socketio/socket.io and put in STAKE/src/webapp/app/base/static/assets/socket.io
+
+	DHCPCD: (Raspberry Pi gateway configuration)		[NEEDED-Smart Home]
+		$sudo apt-get install dhcpcd5		
+	
+	DNSMASQ: (Raspberry Pi gateway configuration)		[NEEDED-Smart Home]
+		$sudo apt-get install dnsmasq
+
+	HOSTAPD: (Raspberry Pi gateway configuration)		[NEEDED-Smart Home]
+		$sudo apt-get install hostapd
+		
+	Bridge-Utils: (Raspberry Pi gateway configuration) 	[NEEDED-Smart Home]
+		$sudo apt-get install bridge-utils
+____
+[Other]
+	Libatlas: (needed for importing in raspbian)	[NEEDED-Web]
+		$sudo apt-get install libatlas-base-dev
+_________________________________________________________________________________________________
+[Extra Tools and Software]; [NN = Not Needed]; [NE = Not Essencial];
+[NN]	TCPDump: (Sniff real-time)
+		$sudo apt-get install tcpdump
+	
+[NN]	Wireshark: (Open .pcap)
+		$sudo apt-get install wireshark
+
+[NE]	TShark: (Convert .pcap to csv)
+		$sudo apt-get install tshark
+		Example:
+			$tshark -r test.pcap -T fields -e frame.number -e eth.src -e eth.dst -e ip.src -e ip.dst -e frame.len > test1.csv
+____
+[Packet Capture Alternative][Problems with sudo]
+PCAP -> Python Packages:
+	Development library for libpcap:
+		$sudo apt-get install libpcap-dev
+
+	Python interface to pcap a packet capture library:
+	[libpcap-dev required] 
+		$sudo pip install pypcap
+
+	[Alternative for pypcap]Python3 interface to pcap a packet capture library:
+		$sudo python3 -m pip install libpcap
+
+	Python wrapper for tshark, allowing python packet parsing using wireshark dissectors:
+		$sudo python3 -m pip install pyshark
+	

@@ -1,0 +1,290 @@
+{% extends "base-site.html" %}
+{% block title %} Dashboard {% endblock %} 
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="/static/assets/DataTables/datatables.min.css"/>
+{% endblock stylesheets %}
+{% block content %}
+    <h2 class="page-title"><i class="fa fa-dashboard"></i> Dashboard - <small>Secure Tracing of Anomalies using previous Knowledge and Extensions</small></h2>
+    <div class="row">
+        <div class="col-lg-9">
+            <section class="widget">
+                <header>
+                    <h4>
+                        <i class="fa fa-table"></i> Smart Home Traffic 
+                    </h4>
+                    <div class="actions">
+                        <div class="text"><a href="/traffic" >View More</a></div>
+                    </div>
+                </header>
+                <div class="body" id="table">
+                    <div id="short_loading_table">
+                        <h3>
+                            Please wait, loading table...
+                            <i class="fa fa-circle-o-notch fa-spin"></i>
+                        </h3>
+                    </div>
+                    <table id="short_traffic_table" class="dataframe table table-hover dataTable no-footer">
+                    </table>
+                </div>
+            </section>
+            <section class="widget">
+                <header>
+                    <h4>
+                        <i class="fa fa-bell"></i> Alert log -
+                        <small>Colors of new alerts <span class="fw-semi-bold">not</span> updated in real-time</small>
+                    </h4>
+                    <div class="actions">
+                        <div class="text"><a href="/alerts" >View More</a></div>
+                    </div>
+                </header>
+                <div class="body" id="table">
+                    <table id='alerttable_short' class="dataframe table table-hover dataTable no-footer" >
+                        <thead>
+                            <tr>
+                                {% for c in columns %}
+                                    <th>{{c}}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for k, v in table %}
+    
+                            {% if v.ALERT_TYPE == 'anomaly' %}
+                                <tr style="background:#a84343;"> 
+                            {% else %}
+                                <tr> 
+                            {% endif %}
+                                    <td>{{v.TIMESTAMP}}</td>
+                                    
+                                    {% if v.ALERT_TYPE == 'info' %}
+                                        <td style="color: #33cccc; ">
+                                            <span class="fw-semi-bold">{{v.ALERT_TYPE}}</span>
+                                        </td>
+                                    {% else %}
+                                        {% if v.ALERT_TYPE == 'error' %}
+                                            <td style="color: #ff5050; ">
+                                                <span class="fw-semi-bold">{{v.ALERT_TYPE}}</span>
+                                            </td>
+                                            {% else %}
+                                                {% if v.ALERT_TYPE == 'success' %}
+                                                    <td style="color: #33cc33; ">
+                                                        <span class="fw-semi-bold">{{v.ALERT_TYPE}}</span>
+                                                    </td>
+                                                {% else %}
+                                                    {% if v.ALERT_TYPE == 'anomaly' %}
+                                                        <td style="color: white; ">
+                                                            <span class="fw-semi-bold">{{v.ALERT_TYPE}}</span>
+                                                        </td>
+                                                    {% else %}
+                                                        <td>
+                                                            <span class="fw-semi-bold">{{v.ALERT_TYPE}}</span>
+                                                        </td>
+                                                    {% endif %}
+                                                {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                    <td>{{v.TITLE}}</td>
+                                    <td>{{v.SHORT_DESCRIPTION}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>      
+                    </table> 
+                    <!--
+                        {% if table %}
+                            {{ table | safe }}
+                        {% else %}
+                        
+                        {% endif %} 
+                    -->
+                </div>
+            </section>
+        </div>
+        <div class="col-lg-3">
+            <section class="widget">
+                <header>
+                    <h3>
+                        <p class="lead fw-semi-bold"> <i class="fa fa-hdd-o"></i> System - 
+                        <small> Overview</small></p>
+                    </h3>
+                    <div class="actions">
+                        <div class="text"><a href="/raspberry" >View More</a></div>
+                    </div>
+                </header>
+                <div class="body">
+                    <ul class="server-stats">
+                        {% if cpu_usage %}
+                        <li>
+                            <header>
+                                <h5>
+                                    CPU 
+                                </h5>
+                            </header>
+                            <div class="stat">
+                                    <div class="info"> 
+                                    {{ cpu_usage | safe }}
+                                    </div>
+                                    <div class="progress progress-small">
+                                        <div class="progress-bar progress-bar-danger" style="width: {{ cpu_usage | safe }};">
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            {% else %}  
+                            {% endif %}  
+                            {% if ( mem_total and mem_used and mem_usage ) %}
+                        <li>
+                            <header>
+                                <h5>
+                                    Virtual Memory
+                                </h5>
+                            </header>
+                            <div class="stat">
+                                <div class="info">{{ mem_usage | safe }}/ {{ mem_used | safe }} ({{ mem_total | safe }})</div>
+                                <div class="progress progress-small">
+                                    <div class="progress-bar progress-bar-info" style="width: {{ mem_usage | safe }};"></div>
+                                </div>
+                            </div>
+                        </li>
+                            {% else %}  
+                            {% endif %} 
+                        {% if ( swap_total and swap_used and swap_usage ) %}
+                        <li>
+                            <header>
+                                <h5>
+                                    Swap Memory
+                                </h5>
+                            </header>
+                            <div class="stat">
+                                <div class="info">{{ swap_usage | safe }}/ {{ swap_used | safe }} ({{ swap_total | safe }})</div>
+                                <div class="progress progress-small">
+                                    <div class="progress-bar" style="width: {{ swap_usage | safe }};"></div>
+                                </div>
+                            </div>
+                        </li>
+                        {% else %}  
+                        {% endif %}
+                        {% if ( disk_total and disk_used and disk_usage ) %}
+                        <li>
+                            <header>
+                                <h5>
+                                    Disk
+                                </h5>
+                            </header>
+                            <div class="stat">
+                                <div class="info">{{ disk_usage | safe }}/ {{ disk_used | safe }} ({{ disk_total | safe }})</div>
+                                <div class="progress progress-small">
+                                    <div class="progress-bar progress-bar-warning" style="width: {{ disk_usage | safe }};"></div>
+                                </div>
+                            </div>
+                        </li>
+                        {% else %}  
+                        {% endif %}
+                        {% if ( bytes_sent and bytes_recv and interfaces and interfaces_progress) %}
+                        <li>
+                            <header>
+                                <h5>
+                                    Network
+                                </h5>
+                            </header>
+                                {{ interfaces_progress }}
+                            <!--
+                            <div class="key pull-right">{{ interfaces | safe }}</div>
+                            <div class="stat">
+                                <div class="info">{{ bytes_recv | safe }} <i class="fa fa-caret-down"></i> &nbsp; {{ bytes_sent | safe }} <i class="fa fa-caret-up"></i></div>
+                                <div class="progress progress-small">
+                                    <div class="progress-bar progress-bar-inverse" style="width: {{ bytes_percentage | safe }};"></div>
+                                </div>
+                            </div>
+                            -->
+                        </li>
+                        {% else %}  
+                        {% endif %}
+                        
+                    </ul>
+                </div>
+            </section>
+            <section class="widget">
+                <header>
+                        <h4>
+                            <p><i class="fa fa-list-alt"></i>  Last 5 added</p><p>Smart Home Devices </p>
+                        </h4>
+                        <div class="actions">
+                            <div class="text"><a href="/devices" >View More</a></div>
+                        </div>
+                    <!--
+    
+                        <div class="widget-controls">
+                            <a data-widgster="expand" title="Expand" href="#" style="display: none;"><i class="glyphicon glyphicon-chevron-up"></i></a>
+                            <a data-widgster="collapse" title="Collapse" href="#"><i class="glyphicon glyphicon-chevron-down"></i></a>
+                            <a data-widgster="close" title="Close" href="#"><i class="glyphicon glyphicon-remove"></i></a>
+                        </div>
+                    -->
+                </header>
+                <div class="widget-body">
+                        <table class="dataframe table table-hover dataTable no-footer">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        MAC Address
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="device_table">
+                                {% if devices_table %}
+                               
+                                    {{ devices_table | safe }}
+                                {% else %}
+                                    
+                                {% endif %}
+                            </tbody>
+                        </table>
+                </div>
+            </section>
+        </div>
+    </div>
+   <!--
+    </div class="row">
+    </div>
+   --> 
+        <div class="col-md-13">
+            <section class="widget">
+                <header>
+                    <h3>
+                        <p class="lead fw-semi-bold"> <i class="fa fa-magic"></i> Plugins - 
+                        <small> Plug-in Statuses and Training Timestamps</small>
+                    </h3>
+                    <div class="actions">
+                        <div class="text"><a href="/plugins" >View More</a></div>
+                    </div>
+                </header>
+                <div class="body">
+                        <div class="body tab-content">
+                            {% if plugins %}
+                                {{ plugins | safe }}
+                            {% else %}                     
+                            {% endif %}
+                        </div>
+                    </section>
+            </section>
+        </div>
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <!-- alert specific libs -->
+    <script src="/static/assets/lib/messenger/build/js/messenger.js"></script>
+    <script src="/static/assets/lib/messenger/build/js/messenger-theme-flat.js"></script>
+    <!-- other alert libs -->
+    <script src="/static/assets/lib/messenger/docs/welcome/javascripts/location-sel.js"></script>
+    <!-- SocketIO: alert-->
+    <script src="/static/assets/socket.io/dist/socket.io.js"> </script>
+    <!-- Alerts-->
+    <script src="/static/assets/js/alerts.js"></script>
+    
+    <!-- Index-->
+    <script src="/static/assets/js/index.js"></script>
+    <!-- DataTable-->
+    <script type="text/javascript" src="/static/assets/DataTables/datatables.min.js"></script>
+{% endblock javascripts %}

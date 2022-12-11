@@ -1,0 +1,5 @@
+Dúvidas: 
+	Porque '$sudo python3 ...' já não encontra os modulos de pcap e sem 'sudo' já funciona?
+
+Problemas:
+	'$sudo python3 ...' não encontra os módulos, mas sem sudo não dá para fazer captura em real-time.

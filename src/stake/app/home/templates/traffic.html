@@ -1,0 +1,341 @@
+{% extends "base-site.html" %}
+{% block title %} Traffic {% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="/static/assets/DataTables/datatables.min.css"/>
+{% endblock stylesheets %}
+{% block content %}
+    <h2 class="page-title"><i class="fa fa-table"></i> Captured Traffic - <span class="fw-semi-bold"><small>Data updated near real-time</small></span></h2>
+    <div class="row">
+        <div class="col-md-18">
+            <section class="widget">
+                <header>
+                    <h4>
+                        Smart Home Traffic 
+                    </h4>
+                </header>
+                <div class="body" id="table">
+                    <div id="loading-table">
+                        <h3>
+                            Please wait, loading table...
+                            <i class="fa fa-circle-o-notch fa-spin"></i>
+                        </h3>
+                    </div>
+                    <table id="traffic_table" class="dataframe table table-hover dataTable no-footer">
+                    </table>
+                </div>
+            </section>
+        </div>    
+    </div>
+    <div class="row">
+        <div class ="col-md-4">
+        <section class="widget widget-tabs">
+            <header>
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#src_ip" data-toggle="tab">Source IP Address</a></li>
+                    <li class=""><a href="#dst_ip" data-toggle="tab">Destination IP Address </a></li>
+                </ul>
+            </header>
+            <div id="tabmac" class="body tab-content">
+                <div class="tab-pane active" id="src_ip">
+                    <div class ="col-md-12">
+                            <header>
+                            <h5>
+                                Source IP - <span class="fw-semi-bold">Pie Chart</span>
+                            </h5>
+                        </header>
+                        <div class="widget-body">
+                            <div id="loading-src-pie">
+                                <h4>
+                                    Please wait, loading pie chart...
+                                    <i class="fa fa-circle-o-notch fa-spin"></i>
+                                </h4>
+                            </div>
+                            <div class="mt mb-4" id="src-pie" style="width: 300px; height: 200px;"></div>
+                            <h5 class="mt">
+                                <p>Stats: </p> <p> <span class="fw-semi-bold">[Source IP(Number packets)]</span></p></h5>
+                                <div class="row mt">
+                                    <div class ="col-md-12">
+                                        <div class="stats-row">
+                                            <div class="stat-item" id="src-pie-stats">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>   
+                            <p class="fs-mini text-muted">
+                                Labels of slices less than 10% are hidden.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="dst_ip">
+                    <div class ="col-md-12">
+                        <header>
+                            <h5>
+                                Destination IP - <span class="fw-semi-bold">Pie Chart</span>
+                            </h5>
+                        </header>
+                        <div class="widget-body">
+                            <div id="loading-dst-pie">
+                                <h4>
+                                    Please wait, loading pie chart...
+                                    <i class="fa fa-circle-o-notch fa-spin"></i>
+                                </h4>
+                            </div>
+                            <div class="mt mb-4" id="dst-pie" style="width: 300px; height: 200px;"></div>
+                            <h5 class="mt">
+                                <p>Stats: </p> <p> <span class="fw-semi-bold">[Destination IP(Number packets)]</span></p></h5>
+                                <div class="row mt">
+                                    <div class ="col-md-12">
+                                        <div class="stats-row">
+                                            <div class="stat-item" id="dst-pie-stats">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>   
+                                <p class="fs-mini text-muted">
+                                Labels of slices less than 10% are hidden.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class ="col-md-4">
+        <section class="widget widget-tabs">
+            <header>
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#src_mac" data-toggle="tab">Source MAC Address</a></li>
+                    <li class=""><a href="#dst_mac" data-toggle="tab">Destination MAC Address </a></li>
+                </ul>
+            </header>
+            <div id="tabmac" class="body tab-content">
+                <div class="tab-pane active" id="src_mac">
+                    <div class ="col-md-12">
+                            <header>
+                            <h5>
+                                Source MAC Address - <span class="fw-semi-bold">Pie Chart</span>
+                            </h5>
+                        </header>
+                        <div class="widget-body">
+                            <div id="loading-src-pie2">
+                                <h4>
+                                    Please wait, loading pie chart...
+                                    <i class="fa fa-circle-o-notch fa-spin"></i>
+                                </h4>
+                            </div>
+                            <div class="mt mb-4" id="src-pie2" style="width: 300px; height: 200px;"></div>
+                            <h5 class="mt">
+                                <p>Stats: </p> <p> <span class="fw-semi-bold">[Source MAC(Number packets)]</span></p></h5>
+                                <div class="row mt">
+                                    <div class ="col-md-12">
+                                        
+                                        <div class="stats-row">
+                                            <div class="stat-item" id="src-pie-stats2">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>   
+                            <p class="fs-mini text-muted">
+                                Labels of slices less than 10% are hidden.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="dst_mac">
+                    <div class ="col-md-12">
+                        <header>
+                            <h5>
+                                Destination MAC Address - <span class="fw-semi-bold">Pie Chart</span>
+                            </h5>
+                        </header>
+                        <div class="widget-body">
+                            <div id="loading-dst-pie2">
+                                <h4>
+                                    Please wait, loading pie chart...
+                                    <i class="fa fa-circle-o-notch fa-spin"></i>
+                                </h4>
+                            </div>
+                            <div class="mt mb-4" id="dst-pie2" style="width: 300px; height: 200px;"></div>
+                            <h5 class="mt">
+                                <p>Stats: </p> <p> <span class="fw-semi-bold">[Destination MAC(Number packets)]</span></p></h5>
+                                <div class="row mt">
+                                    <div class ="col-md-12">
+                                        <div class="stats-row">
+                                            <div class="stat-item" id="dst-pie-stats2">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>   
+                                <p class="fs-mini text-muted">
+                                Labels of slices less than 10% are hidden.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-3">
+        <section class="widget">
+            <header>
+                <h5>
+                    Transport Protocol - <span class="fw-semi-bold">Donut Chart</span>
+                </h5>
+                <!--
+                    <div class="widget-controls">
+                        <a data-widgster="expand" title="Expand" href="#"><i
+                            class="glyphicon glyphicon-chevron-up"></i></a>
+                            <a data-widgster="collapse" title="Collapse" href="#"><i
+                                class="glyphicon glyphicon-chevron-down"></i></a>
+                                <a href="#" data-widgster="close"><i class="glyphicon glyphicon-remove"></i></a>
+                            </div>
+                        -->
+            </header>
+            <div class="widget-body">
+                
+                    <div id="loading-donut">
+                        <h4>
+                            <p>Please wait,</p> <p>loading donut chart...</p>
+                            <i class="fa fa-circle-o-notch fa-spin"></i>
+                        </h4>
+                    </div>
+                    <div class="mt mb-4" id="transport-donut" style="height: 200px;"></div>
+                    
+                    <p class="fs-mini text-muted">
+                        Labels of slices less than 10% are hidden.
+                    </p>
+            </div>
+        </section>
+    </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <section class="widget widget-tabs">
+                <header>
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#src_port" data-toggle="tab">Source Port Used</a></li>
+                        <li class=""><a href="#dst_port" data-toggle="tab">Destination Port Used </a></li>
+                    </ul>
+                </header>
+                <div id="tabbar" class="body tab-content">
+                    <div class="tab-pane active" id="src_port">
+                        <header>
+                            <h5>
+                                Source Port used - <span class="fw-semi-bold">Bar Chart</span>
+                            </h5>
+                            <!--
+                                <div class="widget-controls">
+                                    <a data-widgster="expand" title="Expand" href="#"><i
+                                        class="glyphicon glyphicon-chevron-up"></i></a>
+                                        <a data-widgster="collapse" title="Collapse" href="#"><i
+                                            class="glyphicon glyphicon-chevron-down"></i></a>
+                                            <a href="#" data-widgster="close"><i class="glyphicon glyphicon-remove"></i></a>
+                                        </div>
+                                    -->
+                        </header>
+                        <div class="widget-body">
+                            <div id="src-loading-bar-chart">
+                                <h3>
+                                    Please wait, loading bar chart...
+                                    <i class="fa fa-circle-o-notch fa-spin"></i>
+                                </h3>
+                            </div>
+                            <div class="mt" id="src-port-bar" style="width: 1070px; height: 400px;"></div>
+                                    <p class="fs text-muted">
+                                        [X axis = Port number, Y axis = Times the port was used]
+                                    </p>
+                            <h5 class="mt">
+                                <p>Stats: </p> <p> <span class="fw-semi-bold">[Port(Number of times used)]</span></p></h5>
+                                <div class="row mt">
+                                    <div class ="col-md-12">
+                                        <div class="stats-row">
+                                            <div class="stat-item" id="src-port-stats">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>            
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="dst_port">
+                        <header>
+                            <h5>
+                                Destination Port used - <span class="fw-semi-bold">Bar Chart</span>
+                            </h5>
+                            <!--
+                                <div class="widget-controls">
+                                    <a data-widgster="expand" title="Expand" href="#"><i
+                                        class="glyphicon glyphicon-chevron-up"></i></a>
+                                        <a data-widgster="collapse" title="Collapse" href="#"><i
+                                            class="glyphicon glyphicon-chevron-down"></i></a>
+                                            <a href="#" data-widgster="close"><i class="glyphicon glyphicon-remove"></i></a>
+                                        </div>
+                                    -->
+                        </header>
+                        <div class="widget-body">
+                            <div id="dst-loading-bar-chart">
+                                <h3>
+                                    Please wait, loading bar chart...
+                                    <i class="fa fa-circle-o-notch fa-spin"></i>
+                                </h3>
+                            </div>
+                            <div class="mt" id="dst-port-bar" style="width: 1070px; height: 400px;"></div>
+                                    <p class="fs text-muted">
+                                        [X axis = Port number, Y axis = Times the port was used]
+                                    </p>
+                            <h5 class="mt">
+                                <p>Stats: </p> <p> <span class="fw-semi-bold">[Port(Number of times used)]</span></p></h5>
+                                <div class="row mt">
+                                    <div class ="col-md-12">
+                                        <div class="stats-row">
+                                            <div class="stat-item" id="dst-port-stats">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>            
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>    
+    </div>
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <!-- page specific libs -->
+    <script src="/static/assets/lib/jquery.sparkline/index.js"></script>
+    <!-- page application js [EDITED]-->
+    <script src="/static/assets/js/traffic.js"></script>
+
+    <!-- SocketIO: real-time data-->
+    <script src="/static/assets/socket.io/dist/socket.io.js"> </script>
+    <!-- DataTable-->
+    <script type="text/javascript" src="/static/assets/DataTables/datatables.min.js"></script>
+    <!-- More Charts-->
+    <script src="/static/assets/lib/jquery.sparkline/index.js"></script>
+    <script src="/static/assets/lib/flot.animator/jquery.flot.animator.min.js"></script>
+    <script src="/static/assets/lib/flot/jquery.flot.js"></script>
+    <script src="/static/assets/lib/flot-orderBars/js/jquery.flot.orderBars.js"></script>
+    <script src="/static/assets/lib/flot/jquery.flot.selection.js"></script>
+    <script src="/static/assets/lib/flot/jquery.flot.time.js"></script>
+    <script src="/static/assets/lib/flot/jquery.flot.pie.js"></script>
+    <script src="/static/assets/lib/flot/jquery.flot.stack.js"></script>
+    <script src="/static/assets/lib/flot/jquery.flot.crosshair.js"></script>
+    <script src="/static/assets/lib/flot/jquery.flot.symbol.js"></script>
+
+    <!-- alert specific libs -->
+    <script src="/static/assets/lib/messenger/build/js/messenger.js"></script>
+    <script src="/static/assets/lib/messenger/build/js/messenger-theme-flat.js"></script>
+    <!-- other alert libs -->
+    <script src="/static/assets/lib/backbone/backbone.js"></script>
+    <script src="/static/assets/lib/messenger/docs/welcome/javascripts/location-sel.js"></script>
+    <!-- Alerts-->
+    <script src="/static/assets/js/alerts.js"></script>
+{% endblock javascripts %}

@@ -1,0 +1,67 @@
+## Raspberry Pi as wireless access point
+	# Install hostapd and dnsmasq:
+		$sudo apt-get install hostapd
+		$sudo apt-get install dnsmasq
+	# Turn off services so we can configure files safely:
+		$sudo systemctl stop hostapd
+		$sudo systemctl stop dnsmasq
+	# Configure a static IP for the wlan0 interface:
+		(backup) $sudo cp /etc/dhcpcd.conf /etc/dhcpcd.conf.backup
+		$sudo nano /etc/dhcpcd.conf
+			- Add:
+				interface wlan0
+				static ip_address=192.168.0.10/24
+				denyinterfaces eth0
+				denyinterfaces wlan0
+	# Configure the DHCP server (dnsmasq):
+		$sudo mv /etc/dnsmasq.conf /etc/dnsmasq.conf.backup
+		$sudo nano /etc/dnsmasq.conf
+			- Add:
+				interface=wlan0
+					dhcp-range=192.168.0.11,192.168.0.50,255.255.255.0,24h
+	# Configure the access point host software (hostapd):
+		$sudo nano /etc/hostapd/hostapd.conf 
+		(no backup for hostapd.conf, it is a new file)
+			- Add:
+				interface=wlan0
+				bridge=br0
+				hw_mode=g
+				channel=7
+				wmm_enabled=0
+				macaddr_acl=0
+				auth_algs=1
+				ignore_broadcast_ssid=0
+				wpa=2
+				wpa_key_mgmt=WPA-PSK
+				wpa_pairwise=TKIP
+				rsn_pairwise=CCMP
+				ssid=STAKE
+				wpa_passphrase=kevinpi12345
+		(backup) $sudo cp /etc/default/hostapd /etc/default/hostapd.backup
+		$sudo nano /etc/default/hostapd
+			- Add:
+				DAEMON_CONF="/etc/hostapd/hostapd.conf"
+	# Set up traffic forwarding:
+		(backup) $sudo cp /etc/sysctl.conf /etc/sysctl.conf.backup
+		$sudo nano /etc/sysctl.conf
+			- Uncomment (remove #):
+				net.ipv4.ip_forward=1
+	# Add a new iptables rule:
+		$sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+		$sudo sh -c "iptables-save > /etc/iptables.ipv4.nat"
+		$sudo iptables-restore < /etc/iptables.ipv4.nat
+	# Enable internet connection:
+		$sudo apt-get install bridge-utils
+		$sudo brctl addbr br0
+		$sudo brctl addif br0 eth0
+		(backup) $sudo cp /etc/network/interfaces /etc/network/interfaces.backup
+		$sudo nano /etc/network/interfaces
+			- Add:
+				auto br0
+				iface br0 inet dhcp
+				bridge_ports eth0 wlan0
+	# Reboot:
+		$sudo reboot
+	# Turn on services if needed:
+		$sudo systemctl start hostapd
+		$sudo systemctl start dnsmasq

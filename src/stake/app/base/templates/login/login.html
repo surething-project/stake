@@ -1,0 +1,53 @@
+{% extends "base-site-fullscreen.html" %}
+{% block title %} Login {% endblock %} 
+{% block content %}
+    <section class="widget login-widget">
+        <header class="text-align-center">
+            <h3>
+                {% if msg %}
+                    {{ msg | safe }}
+                {% else %}
+                    <p>STAKE <img src="static/assets/img/favicon3.png" alt="STAKE"></p> 
+                    <h4><p>Secure Tracing of Anomalies using previous Knowledge and Extensions</p> </h4>
+                {% endif %}               
+            </h3>
+        </header>
+        <div class="body">
+            <form role="form" method="post" action="">
+                {{ form.hidden_tag() }} 
+                <fieldset>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-user"></i>
+                            </span>
+                            {{ form.username(placeholder="Username", class="form-control input-lg input-transparent") }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" >Password</label>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">
+                                <i class="fa fa-lock"></i>
+                            </span>
+                            {{ form.password(placeholder="Password", class="form-control input-lg input-transparent", type="password") }}
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-actions">
+                    <button type="submit" name="login" class="btn btn-block btn-lg btn-danger">
+                        <span class="small-circle"><i class="fa fa-caret-right"></i></span>
+                        <small>Login</small>
+                    </button>
+                    <a class="forgot" href={{ url_for('base_blueprint.create_user') }} >Don't have an account? Register</a>
+                </div>
+            </form>
+        </div>
+        <footer>
+            <div align="center">
+                {% include 'site_template/footer.html' %}
+            </div>
+        </footer>
+    </section>
+{% endblock content %}

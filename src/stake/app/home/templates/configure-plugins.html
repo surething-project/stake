@@ -1,0 +1,1517 @@
+{% extends "base-site.html" %}
+{% block title %} Plug-ins Configuration {% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+{% block content %}
+<h2 class="page-title"><i class="fa fa-magic"></i> Plug-ins Configuration - <small>Add, Edit or Remove Plug-ins</small></h2>
+<div class="row">
+    <div class="col-md-12">
+    <section class="widget widget-tabs">
+        <header>
+            <ul class="nav nav-tabs">
+                {% if add_tab %}
+                <li class="active"><a href="#add-plugin" data-toggle="tab">Add Plug-in</a></li>
+                <li class=""><a href="#edit-plugin" data-toggle="tab">Edit/Remove Plug-in </a></li>
+                {% else %}
+                <li class=""><a href="#add-plugin" data-toggle="tab">Add Plug-in</a></li>
+                <li class="active"><a href="#edit-plugin" data-toggle="tab">Edit/Remove Plug-in </a></li>
+                {% endif %} 
+            </ul>
+        </header>
+        <div id="tabplugin" class="body tab-content">
+            {% if add_tab %}
+            <div class="tab-pane active" id="add-plugin">
+            {% else %}
+            <div class="tab-pane" id="add-plugin">
+            {% endif %} 
+                    <h3>Add new  <span class="fw-semi-bold">Plug-ins</span></h3>
+                        <div class="widget-body">
+                            {% if msg_add %}
+                            <h3 style="color:{{ color }};">
+                                {{ msg_add | safe }}
+                            </h3>
+                            {% else %}
+                            {% endif %} 
+                        <form role="form" method="post" enctype="multipart/form-data" action="">
+                            <div class="widget-padding-md border rounded">
+                                <div class="form-group">
+                                    <label for="plugin" > <h4><i class="fa fa-info"></i> Plug-in Information</h4></label>
+                                    <div class="input-group" style="width:100%;">
+                                        <!--
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-magic"></i>
+                                            </span>
+                                        -->
+                                        <div class="row">
+                                            <div class="col-md-4 padding-0-right">
+                                                <span data-toggle="tooltip" title="No python files (.py) are accepted.
+    Only saved models (.sav)." class="form-control input-sm input-group-addon">
+                                                    <i class="glyphicon glyphicon-question-sign"></i>
+                                                    {{ form.add_file.label }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-8 padding-0-left">
+                                                <span data-toggle="tooltip" title="No python files (.py) are accepted.
+    Only saved models (.sav)." >
+                                                    {{ form.add_file( class="form-control input-sm input-transparent") }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-md-2 padding-0-right">
+                                                <p>{{ form.add_pluginname.label(class="form-control input-sm input-group-addon") }}</p>
+                                                <p>{{ form.add_category.label(class="form-control input-sm input-group-addon") }}</p>
+                                                <p>{{ form.add_activate.label(class="form-control input-sm input-group-addon") }} </p>
+                                                <p>{{ form.add_retrain.label(class="form-control input-sm input-group-addon") }} </p>
+                                            </div>
+                                            <div class="col-md-4 padding-0-horizontal">
+                                                {{ form.add_pluginname(placeholder="Name", class="form-control input-sm input-transparent") }}
+                                                {{ form.add_category(placeholder="Category", class="form-control input-sm input-transparent") }}
+                                                <span >
+                                                    <p class="input-group-addon" valign="middle">
+                                                        {{ form.add_activate(placeholder="Active") }}
+                                                    </p>
+                                                </span>
+                                                <span>
+                                                    <p class="input-group-addon" valign="middle">
+                                                        {{ form.add_retrain(placeholder="Retrain") }}
+                                                    </p>
+                                                </span>
+                                            </div>
+                                            <div class="col-md-2 padding-0-right">
+                                                <p>{{ form.add_trainingperiodtype.label(class="form-control input-sm input-group-addon") }}</p>
+                                                <p>{{ form.add_trainingperiodduration.label(class="form-control input-sm input-group-addon") }}</p>
+                                                <p>{{ form.add_anomalysize.label(class="form-control input-sm input-group-addon") }}</p>
+                                                <div id="add_testsize_div">
+                                                    <p>{{ form.add_testsize.label(class="form-control input-sm input-group-addon") }} </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 padding-0-left">
+                                                {{ form.add_trainingperiodtype(placeholder="Training Period Type", class="form-control input-sm input-transparent") }}
+                                                {{ form.add_trainingperiodduration(placeholder="Training Period Duration (e.g. 2)", class="form-control input-sm input-transparent") }}
+                                                {{ form.add_anomalysize(placeholder="Anomaly Size (e.g. 0.25)", class="form-control input-sm input-transparent") }}
+                                                <div id="add_testsize_div2">
+                                                    {{ form.add_testsize(placeholder="Test Size (e.g. 0.3)", class="form-control input-sm input-transparent") }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="datapreprocessing" > <h4><i class="fa fa-list-ol"></i> Data Pre-processing Steps</h4></label>
+                                    <div class="input-group" style="width:100%;">                                    
+                                        <header>
+                                        <h5 > Feature Extraction</h5>
+                                        </header>
+                                        <div class="row ">
+                                            <!--
+                                                <div class="col-md-6">
+                                                    <span data-toggle="tooltip" title="Noise and irrelevant data are removed from the data." class="form-control input-sm input-group-addon">
+                                                        <i class="glyphicon glyphicon-question-sign"></i>
+                                                        {{ form.add_cleaning.label }}
+                                                        &nbsp;
+                                                        {{ form.add_cleaning }}
+                                                    </span>
+                                                </div>
+                                            -->
+                                            <div class="col-md-6">
+                                                <span data-toggle="tooltip" title="Combining data from multiple and heterogeneous sources into one database." class="form-control input-sm input-group-addon">
+                                                    <i class="glyphicon glyphicon-question-sign"></i>
+                                                    {{ form.add_integration.label(disabled=True) }}
+                                                    &nbsp;
+                                                    {{ form.add_integration(disabled=True) }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <header>
+                                        <h5 > Feature Selection - Data Selection</h5>
+                                        </header>
+                                        <div class="row ">
+                                                <div class="col-md-3 padding-0-right" >
+                                                    <span data-toggle="tooltip" title="Type of the Data training size value" class="form-control input-sm input-group-addon">
+                                                        <i class="glyphicon glyphicon-question-sign"></i> {{ form.add_selectionperiodtype.label}}
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-3 padding-0-left">
+                                                    <span data-toggle="tooltip" title="Type of the Data training size value">
+                                                        {{ form.add_selectionperiodtype(placeholder="Data Training Size Type", class="form-control input-sm input-transparent") }}
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-2 padding-0-right">
+                                                    <span data-toggle="tooltip" title="Insert '0' if all data is wanted." class="form-control input-sm input-group-addon">
+                                                        <i class="glyphicon glyphicon-question-sign"></i> {{ form.add_selectionperiodduration.label }} 
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-4 padding-0-left">
+                                                    <span data-toggle="tooltip" title="Insert '0' if maximum instances limit is unwanted." >
+                                                        {{ form.add_selectionperiodduration(placeholder="Data Training Size (e.g. 7 days or 3000 instances)", class="form-control input-sm input-transparent") }}
+                                                    </span>
+                                                </div>
+                                        </div>
+                                        <header>
+                                            <h5 > Feature Selection </h5>
+                                            <h6> Primary Data Transformation</h6>
+                                        </header>
+                                        <div class="row ">
+                                                <div class="col-md-3 padding-0-right" >
+                                                    <span data-toggle="tooltip" title="Data is transformed into suitable formats: 
+    - Changing data types;
+    - Removing string formatting and non-alphanumeric characters;
+    - Converting categorical data to numerical;
+    - Converting timestamps;" class="form-control input-sm input-group-addon">
+                                                        <i class="glyphicon glyphicon-question-sign"></i> {{ form.add_transformation.label}}
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-3 padding-0-left">
+                                                    <span data-toggle="tooltip" title="Type of the Data training size value">
+                                                        {{ form.add_transformation( class="form-control input-sm input-transparent") }}
+                                                    </span>
+                                                </div>
+                                        </div>
+                                        <header>
+                                            <h6> Secondary Data Transformation</h6>
+                                        </header>
+                                        <div class="row ">
+                                                <div class="col-md-3 padding-0-right" >
+                                                    <span data-toggle="tooltip" title="Data is transformed into suitable formats: 
+    - Normalization rescales the values into a range of [0,1];
+    - Standardization rescales data to have a mean of 0 and a standard deviation of 1;" class="form-control input-sm input-group-addon">
+                                                        <i class="glyphicon glyphicon-question-sign"></i> {{ form.add_secondary_transformation.label}}
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-3 padding-0-left">
+                                                    <span data-toggle="tooltip" title="Type of the Data training size value">
+                                                        {{ form.add_secondary_transformation( class="form-control input-sm input-transparent") }}
+                                                    </span>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="datasetfields" > <h4><i class="fa fa-table"></i> Dataset Fields (Feature Selection)</h4></label>
+                                    <div class="input-group" style="width:100%;">
+                                        <header>
+                                        <h5 > Ethernet Fields
+                                            <input type="checkbox" id="add_ethernet_fields" name="add_ethernet_fields" value="add_ethernet_fields">
+                                        </h5>
+                                        </header>
+                                        <div class="row ">
+                                            <div class="col-md-3">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_ETHER_src.label }}
+                                                    &nbsp;
+                                                    {{ form.add_ETHER_src }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_ETHER_dst.label }}
+                                                    &nbsp;
+                                                    {{ form.add_ETHER_dst }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_ETHER_ip.label }}
+                                                    &nbsp;
+                                                    {{ form.add_ETHER_ip }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_ETHER_type.label }}
+                                                    &nbsp;
+                                                    {{ form.add_ETHER_type }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <header>
+                                        <h5 > ARP Fields
+                                            <input type="checkbox" id="add_arp_fields" name="add_arp_fields" value="add_arp_fields">
+                                        </h5>
+                                        </header>
+                                        <div class="row ">
+                                            <div class="col-md-3">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_ARP_hln.label }}
+                                                    &nbsp;
+                                                    {{ form.add_ARP_hln }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_ARP_hrd.label }}
+                                                    &nbsp;
+                                                    {{ form.add_ARP_hrd }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_ARP_op.label }}
+                                                    &nbsp;
+                                                    {{ form.add_ARP_op }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_ARP_pln.label }}
+                                                    &nbsp;
+                                                    {{ form.add_ARP_pln }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="row ">
+                                            <div class="col-md-3">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_ARP_pro.label }}
+                                                    &nbsp;
+                                                    {{ form.add_ARP_pro }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_ARP_sha.label }}
+                                                    &nbsp;
+                                                    {{ form.add_ARP_sha }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_ARP_spa.label }}
+                                                    &nbsp;
+                                                    {{ form.add_ARP_spa }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_ARP_tha.label }}
+                                                    &nbsp;
+                                                    {{ form.add_ARP_tha }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="row ">
+                                            <div class="col-md-3">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_ARP_tpa.label }}
+                                                    &nbsp;
+                                                    {{ form.add_ARP_tpa }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <header>
+                                        <h5 > IP Fields
+                                            <input type="checkbox" id="add_ip_fields" name="add_ip_fields" value="add_ip_fields">
+                                        </h5>
+                                        </header>
+                                        <div class="row ">
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_IP_src.label }}
+                                                    &nbsp;
+                                                    {{ form.add_IP_src }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_IP_dst.label }}
+                                                    &nbsp;
+                                                    {{ form.add_IP_dst }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_IP_id.label }}
+                                                    &nbsp;
+                                                    {{ form.add_IP_id }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="row ">
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_IP_hl.label }}
+                                                    &nbsp;
+                                                    {{ form.add_IP_hl }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_IP_df.label }}
+                                                    &nbsp;
+                                                    {{ form.add_IP_df }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_IP_len.label }}
+                                                    &nbsp;
+                                                    {{ form.add_IP_len }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="row ">
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_IP_mf.label }}
+                                                    &nbsp;
+                                                    {{ form.add_IP_mf }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_IP_off.label }}
+                                                    &nbsp;
+                                                    {{ form.add_IP_off }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_IP_offset.label }}
+                                                    &nbsp;
+                                                    {{ form.add_IP_offset }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="row ">
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_IP_opts.label }}
+                                                    &nbsp;
+                                                    {{ form.add_IP_opts }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_IP_p.label }}
+                                                    &nbsp;
+                                                    {{ form.add_IP_p }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_IP_rf.label }}
+                                                    &nbsp;
+                                                    {{ form.add_IP_rf }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="row ">
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_IP_sum.label }}
+                                                    &nbsp;
+                                                    {{ form.add_IP_sum }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_IP_tos.label }}
+                                                    &nbsp;
+                                                    {{ form.add_IP_tos }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_IP_ttl.label }}
+                                                    &nbsp;
+                                                    {{ form.add_IP_ttl }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="row ">
+                                            <div class="col-md-4">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_IP_v.label }}
+                                                    &nbsp;
+                                                    {{ form.add_IP_v }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <header>
+                                        <h5 > ICMP Fields
+                                            <input type="checkbox" id="add_icmp_fields" name="add_icmp_fields" value="add_icmp_fields">
+                                        </h5>
+                                        </header>
+                                        <div class="row ">
+                                            <div class="col-md-3">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_ICMP_type.label }}
+                                                    &nbsp;
+                                                    {{ form.add_ICMP_type }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_ICMP_code.label }}
+                                                    &nbsp;
+                                                    {{ form.add_ICMP_code }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_ICMP_sum.label }}
+                                                    &nbsp;
+                                                    {{ form.add_ICMP_sum }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <header>
+                                        <h5> TCP Fields
+                                            <input type="checkbox" id="add_tcp_fields" name="add_tcp_fields" value="add_tcp_fields">
+                                        </h5>
+                                        </header>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_TCP_sport.label }}
+                                                    &nbsp;
+                                                    {{ form.add_TCP_sport }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_TCP_dport.label }}
+                                                    &nbsp;
+                                                    {{ form.add_TCP_dport }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_TCP_ack.label }}
+                                                    &nbsp;
+                                                    {{ form.add_TCP_ack }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="row ">
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_TCP_flags.label }}
+                                                    &nbsp;
+                                                    {{ form.add_TCP_flags }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_TCP_off.label }}
+                                                    &nbsp;
+                                                    {{ form.add_TCP_off }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_TCP_opts.label }}
+                                                    &nbsp;
+                                                    {{ form.add_TCP_opts }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="row ">
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_TCP_seq.label }}
+                                                    &nbsp;
+                                                    {{ form.add_TCP_seq }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_TCP_sum.label }}
+                                                    &nbsp;
+                                                    {{ form.add_TCP_sum }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_TCP_urp.label }}
+                                                    &nbsp;
+                                                    {{ form.add_TCP_urp }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="row ">
+                                            <div class="col-md-4">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_TCP_win.label }}
+                                                    &nbsp;
+                                                    {{ form.add_TCP_win }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <header>
+                                        <h5> UDP Fields
+                                            <input type="checkbox" id="add_udp_fields" name="add_udp_fields" value="add_udp_fields">
+                                        </h5>
+                                        </header>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_UDP_sport.label }}
+                                                    &nbsp;
+                                                    {{ form.add_UDP_sport }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_UDP_dport.label }}
+                                                    &nbsp;
+                                                    {{ form.add_UDP_dport }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_UDP_sum.label }}
+                                                    &nbsp;
+                                                    {{ form.add_UDP_sum }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span class="form-control input-sm input-group-addon">
+                                                    {{ form.add_UDP_ulen.label }}
+                                                    &nbsp;
+                                                    {{ form.add_UDP_ulen }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                            <header>
+                                            <h5> Payload Fields (TCP/UDP/ICMP)
+                                                <input type="checkbox" id="add_payload_fields" name="add_payload_fields" value="add_payload_fields">
+                                            </h5>
+                                            </header>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <span class="form-control input-sm input-group-addon">
+                                                        {{ form.add_PAYLOAD_len.label }}
+                                                        &nbsp;
+                                                        {{ form.add_PAYLOAD_len }}
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <span class="form-control input-sm input-group-addon">
+                                                        {{ form.add_PAYLOAD_raw.label }}
+                                                        &nbsp;
+                                                        {{ form.add_PAYLOAD_raw }}
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <span class="form-control input-sm input-group-addon">
+                                                        {{ form.add_PAYLOAD_hex.label }}
+                                                        &nbsp;
+                                                        {{ form.add_PAYLOAD_hex }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <header>
+                                            <h5> Extra Fields
+                                                <input type="checkbox" id="add_extra_fields" name="add_extra_fields" value="add_extra_fields">
+                                            </h5>
+                                            </header>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <span class="form-control input-sm input-group-addon">
+                                                        {{ form.add_timestamp.label }}
+                                                        &nbsp;
+                                                        {{ form.add_timestamp }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="evaluationmethods" > <h4><i class="fa fa-bar-chart-o"></i> Evaluation Methods</h4></label>
+                                    <div class="input-group" style="width:100%;">   
+                                        <div id="add_basic_evaluation_div">                                
+                                            <header>
+                                            <h5 > Basic Evaluation <small> (TP=True Positive| FN=False Negative| TN=True Negative| FP= False Positive)</small>
+                                                <input type="checkbox" id="add_basic_evaluation" name="add_basic_evaluation" value="add_basic_evaluation">
+                                            </h5>
+                                            </header>
+                                            <div class="row ">
+                                                <div class="col-md-3">
+                                                    <span data-toggle="tooltip" title="(TP+TN)/ (TP+FN+TN+FP)" class="form-control input-sm input-group-addon">
+                                                        <i class="glyphicon glyphicon-question-sign"></i>
+                                                        {{ form.add_accuracy.label }}
+                                                        &nbsp;
+                                                        {{ form.add_accuracy }}
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <span data-toggle="tooltip" title="(TP)/ (TP+FP) " class="form-control input-sm input-group-addon">
+                                                        <i class="glyphicon glyphicon-question-sign"></i>
+                                                        {{ form.add_precision.label }}
+                                                        &nbsp;
+                                                        {{ form.add_precision }}
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <span data-toggle="tooltip" title="(TP)/ (TP+FN)" class="form-control input-sm input-group-addon">
+                                                        <i class="glyphicon glyphicon-question-sign"></i>
+                                                        {{ form.add_recall.label }}
+                                                        &nbsp;
+                                                        {{ form.add_recall }}
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <span data-toggle="tooltip" title="2* ( (Precision*Recall)/ (Precision+Recall) )" class="form-control input-sm input-group-addon">
+                                                        <i class="glyphicon glyphicon-question-sign"></i>
+                                                        {{ form.add_f_score.label }}
+                                                        &nbsp;
+                                                        {{ form.add_f_score }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="row ">
+                                                <div class="col-md-3">
+                                                    <span data-toggle="tooltip" title="(TN)/ (TN+FP)" class="form-control input-sm input-group-addon">
+                                                        <i class="glyphicon glyphicon-question-sign"></i>
+                                                        {{ form.add_specificity.label }}
+                                                        &nbsp;
+                                                        {{ form.add_specificity }}
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <span data-toggle="tooltip" title="(FP)/ (TN+FP)" class="form-control input-sm input-group-addon">
+                                                        <i class="glyphicon glyphicon-question-sign"></i>
+                                                        {{ form.add_false_positive_rate.label }}
+                                                        &nbsp;
+                                                        {{ form.add_false_positive_rate }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                        <header>
+                                        <h5 > Advanced Evaluation
+                                            <input type="checkbox" id="add_advanced_evaluation" name="add_advanced_evaluation" value="add_advanced_evaluation">
+                                        </h5>
+                                        </header>
+                                        <div class="row ">
+                                            <div class="col-md-6">
+                                                <span data-toggle="tooltip" title="Transforms the columns into uncorrelated variables, scale the columns to make their variance equal to 1 and, nally, calculates the Euclidean distance." class="form-control input-sm input-group-addon">
+                                                    <i class="glyphicon glyphicon-question-sign"></i>
+                                                    {{ form.add_mahalanobis.label }}
+                                                    &nbsp;
+                                                    {{ form.add_mahalanobis }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div id="add_supervised_advanced_evaluation_div">
+                                                    <span data-toggle="tooltip" title="(1/n) Sum{n, i=1} ( yi - avg(yi) )^2" class="form-control input-sm input-group-addon">
+                                                        <i class="glyphicon glyphicon-question-sign"></i>
+                                                        {{ form.add_mse.label }}
+                                                        &nbsp;
+                                                        {{ form.add_mse }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="add_plot_evaluation_div">
+                                            <header>
+                                            <h5 > Plot Evaluation
+                                                <input type="checkbox" id="add_plot_evaluation" name="add_plot_evaluation" value="add_plot_evaluation">
+                                            </h5>
+                                            </header>
+                                            <div class="row ">
+                                                <div class="col-md-6">
+                                                    <span data-toggle="tooltip" title="Plotting the true positive rate, also known as recall, against the false positive rate at various threshold settings." class="form-control input-sm input-group-addon">
+                                                        <i class="glyphicon glyphicon-question-sign"></i>
+                                                        {{ form.add_roc.label }}
+                                                        &nbsp;
+                                                        {{ form.add_roc }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="width:100%;">   
+                                        <div class="row ">
+                                            <div class="col-md-6">
+                                                <button type="submit" name="submit_add_plugin" class="btn btn-lg btn-success">
+                                                    <span class="small-circle"><i class="glyphicon glyphicon-plus-sign"></i></span>
+                                                    <small>Add Plug-in</small>
+                                                </button>
+                                                <button type="submit" name="submit_add_plugin_train" class="btn btn-lg btn-success">
+                                                    <span class="small-circle"><i class="glyphicon glyphicon-plus-sign"></i></span>
+                                                    <small>Add and Train Plug-in</small>
+                                                </button>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+            </div>
+<!-- _______________________________________________________________________________________________________________________________-->
+            {% if add_tab %}
+            <div class="tab-pane" id="edit-plugin">
+            {% else %}
+            <div class="tab-pane active" id="edit-plugin">
+            {% endif %} 
+            <form id="editpluginform" role="form" enctype="multipart/form-data" method="post" action="">    
+                <h3>
+                    <p>
+                        Edit or Remove existing 
+                        <span class="fw-semi-bold">Plug-ins 
+                        </span>
+                    </p>
+                        {% if msg_edit %}
+                        <p>
+                            <h3 style="color:{{ color }};">
+                                {{ msg_edit | safe }}
+                            </h3>
+                        </p>
+                        {% else %}
+                        {% endif %} 
+                    <p>
+                        Plug-in: 
+                        {{ form.edit_pluginname(class="form-control input-lg input-transparent", style="width:400px;") }}
+                    </p>
+                </h3>
+                <div class="widget-body">
+                    <div class="widget-padding-md border rounded">
+                        <div class="form-group">
+                            <label for="plugin" > <h4><i class="fa fa-info"></i> Plug-in Information</h4></label>
+                            <div class="input-group" style="width:100%;">
+                                <!--
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-magic"></i>
+                                    </span>
+                                -->
+                                <div class="row">
+                                    <div class="col-md-2 padding-0-right">
+                                        <p>{{ form.edit_category.label(class="form-control input-sm input-group-addon") }}</p>
+                                        <p>{{ form.edit_activate.label(class="form-control input-sm input-group-addon") }} </p>
+                                        <p>{{ form.edit_retrain.label(class="form-control input-sm input-group-addon") }} </p>
+                                    </div>
+                                    <div class="col-md-4 padding-0-horizontal">
+                                        {{ form.edit_category(placeholder="Category", class="form-control input-sm input-transparent") }}
+                                        <span >
+                                            <p class="input-group-addon" valign="middle">
+                                                {{ form.edit_activate(placeholder="Active") }}
+                                            </p>
+                                        </span>
+                                        <span>
+                                            <p class="input-group-addon" valign="middle">
+                                                {{ form.edit_retrain(placeholder="Retrain") }}
+                                            </p>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-2 padding-0-right">
+                                        <p>{{ form.edit_trainingperiodtype.label(class="form-control input-sm input-group-addon") }}</p>
+                                        <p>{{ form.edit_trainingperiodduration.label(class="form-control input-sm input-group-addon") }}</p>
+                                        <p>{{ form.edit_anomalysize.label(class="form-control input-sm input-group-addon") }}</p>
+                                        <div id="edit_testsize_div">
+                                            <p>{{ form.edit_testsize.label(class="form-control input-sm input-group-addon") }} </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 padding-0-left">
+                                        {{ form.edit_trainingperiodtype(placeholder="Training Period Type", class="form-control input-sm input-transparent") }}
+                                        {{ form.edit_trainingperiodduration(placeholder="Training Period Duration (e.g. 2)", class="form-control input-sm input-transparent") }}
+                                        {{ form.edit_anomalysize(placeholder="Anomaly Size (e.g. 0.25)", class="form-control input-sm input-transparent") }}
+                                        <div id="edit_testsize_div2">
+                                            {{ form.edit_testsize(placeholder="Test Size (e.g. 0.3)", class="form-control input-sm input-transparent") }}
+                                        </div>
+                                    </div>
+                                </div>
+                            <!--
+                                <br>
+                                    <div class="row">
+                                        <div class="col-md-4 padding-0-right">
+                                            <span data-toggle="tooltip" title="No python files (.py) are accepted.
+Only saved models (.sav)." class="form-control input-sm input-group-addon">
+                                                <i class="glyphicon glyphicon-question-sign"></i>
+                                                {{ form.edit_file.label }}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-8 padding-0-left">
+                                            <span data-toggle="tooltip" title="No python files (.py) are accepted.
+Only saved models (.sav)." >
+                                                {{ form.edit_file( class="form-control input-sm input-transparent") }}
+                                            </span>
+                                        </div>
+                                    </div>
+                            -->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="datapreprocessing" > <h4><i class="fa fa-list-ol"></i> Data Pre-processing Steps</h4></label>
+                            <div class="input-group" style="width:100%;">                                    
+                                <header>
+                                <h5 > Feature Extraction</h5>
+                                </header>
+                                <div class="row ">
+                                    <!--
+                                        <div class="col-md-6">
+                                            <span data-toggle="tooltip" title="Noise and irrelevant data are removed from the data." class="form-control input-sm input-group-addon">
+                                                <i class="glyphicon glyphicon-question-sign"></i>
+                                                {{ form.edit_cleaning.label }}
+                                                &nbsp;
+                                                {{ form.edit_cleaning }}
+                                            </span>
+                                        </div>
+                                    -->
+                                    <div class="col-md-6">
+                                        <span data-toggle="tooltip" title="Combining data from multiple and heterogeneous sources into one database." class="form-control input-sm input-group-addon">
+                                            <i class="glyphicon glyphicon-question-sign"></i>
+                                            {{ form.edit_integration.label(disabled=True) }}
+                                            &nbsp;
+                                            {{ form.edit_integration(disabled=True) }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <header>
+                                    <h5 > Feature Selection - Data Selection</h5>
+                                    </header>
+                                    <div class="row ">
+                                            <div class="col-md-3 padding-0-right" >
+                                                <span data-toggle="tooltip" title="Type of the Data training size value" class="form-control input-sm input-group-addon">
+                                                    <i class="glyphicon glyphicon-question-sign"></i> {{ form.edit_selectionperiodtype.label}}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-3 padding-0-left">
+                                                <span data-toggle="tooltip" title="Type of the Data training size value">
+                                                    {{ form.edit_selectionperiodtype(placeholder="Data Training Size Type", class="form-control input-sm input-transparent") }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-2 padding-0-right">
+                                                <span data-toggle="tooltip" title="Insert '0' if all data is wanted." class="form-control input-sm input-group-addon">
+                                                    <i class="glyphicon glyphicon-question-sign"></i> {{ form.edit_selectionperiodduration.label }} 
+                                                </span>
+                                            </div>
+                                            <div class="col-md-4 padding-0-left">
+                                                <span data-toggle="tooltip" title="Insert '0' if maximum instances limit is unwanted." >
+                                                    {{ form.edit_selectionperiodduration(placeholder="Data Training Size (e.g.: 7 days or 3000 instances)", class="form-control input-sm input-transparent") }}
+                                                </span>
+                                            </div>
+                                    </div>
+                                <header>
+                                    <h5 > Feature Selection </h5>
+                                    <h6>Primary Data Transformation</h6>
+                                </header>
+                                    <div class="row ">
+                                        <div class="col-md-3 padding-0-right" >
+                                            <span data-toggle="tooltip" title="Data is transformed into suitable formats: 
+    - Changing data types;
+    - Removing string formatting and non-alphanumeric characters;
+    - Converting categorical data to numerical;
+    - Converting timestamps;" class="form-control input-sm input-group-addon">
+                                                <i class="glyphicon glyphicon-question-sign"></i> {{ form.edit_transformation.label}}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-3 padding-0-left">
+                                                <span data-toggle="tooltip" title="Type of the Data training size value">
+                                                    {{ form.edit_transformation( class="form-control input-sm input-transparent") }}
+                                                </span>
+                                        </div>
+                                    </div>
+                                    <header>
+                                        <h6> Secondary Data Transformation</h6>
+                                    </header>
+                                    <div class="row ">
+                                            <div class="col-md-3 padding-0-right" >
+                                                <span data-toggle="tooltip" title="Data is transformed into suitable formats: 
+- Normalization rescales the values into a range of [0,1];
+- Standardization rescales data to have a mean of 0 and a standard deviation of 1;" class="form-control input-sm input-group-addon">
+                                                    <i class="glyphicon glyphicon-question-sign"></i> {{ form.edit_secondary_transformation.label}}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-3 padding-0-left">
+                                                <span data-toggle="tooltip" title="Type of the Data training size value">
+                                                    {{ form.edit_secondary_transformation( class="form-control input-sm input-transparent") }}
+                                                </span>
+                                            </div>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="datasetfields" > <h4><i class="fa fa-table"></i> Dataset Fields (Feature Selection)</h4></label>
+                            <div class="input-group" style="width:100%;">
+                                <header>
+                                <h5 > Ethernet Fields 
+                                        <input type="checkbox" id="edit_ethernet_fields" name="edit_ethernet_fields" value="edit_ethernet_fields">
+                                </h5>
+                                </header>
+                                <div class="row ">
+                                    <div class="col-md-3">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_ETHER_src.label }}
+                                            &nbsp;
+                                            {{ form.edit_ETHER_src }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_ETHER_dst.label }}
+                                            &nbsp;
+                                            {{ form.edit_ETHER_dst }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_ETHER_ip.label }}
+                                            &nbsp;
+                                            {{ form.edit_ETHER_ip }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_ETHER_type.label }}
+                                            &nbsp;
+                                            {{ form.edit_ETHER_type }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <header>
+                                    <h5 > ARP Fields
+                                        <input type="checkbox" id="edit_arp_fields" name="edit_arp_fields" value="edit_arp_fields">
+                                    </h5>
+                                    </header>
+                                    <div class="row ">
+                                        <div class="col-md-3">
+                                            <span class="form-control input-sm input-group-addon">
+                                                {{ form.edit_ARP_hln.label }}
+                                                &nbsp;
+                                                {{ form.edit_ARP_hln }}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <span class="form-control input-sm input-group-addon">
+                                                {{ form.edit_ARP_hrd.label }}
+                                                &nbsp;
+                                                {{ form.edit_ARP_hrd }}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <span class="form-control input-sm input-group-addon">
+                                                {{ form.edit_ARP_op.label }}
+                                                &nbsp;
+                                                {{ form.edit_ARP_op }}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <span class="form-control input-sm input-group-addon">
+                                                {{ form.edit_ARP_pln.label }}
+                                                &nbsp;
+                                                {{ form.edit_ARP_pln }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-md-3">
+                                            <span class="form-control input-sm input-group-addon">
+                                                {{ form.edit_ARP_pro.label }}
+                                                &nbsp;
+                                                {{ form.edit_ARP_pro }}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <span class="form-control input-sm input-group-addon">
+                                                {{ form.edit_ARP_sha.label }}
+                                                &nbsp;
+                                                {{ form.edit_ARP_sha }}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <span class="form-control input-sm input-group-addon">
+                                                {{ form.edit_ARP_spa.label }}
+                                                &nbsp;
+                                                {{ form.edit_ARP_spa }}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <span class="form-control input-sm input-group-addon">
+                                                {{ form.edit_ARP_tha.label }}
+                                                &nbsp;
+                                                {{ form.edit_ARP_tha }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-md-3">
+                                            <span class="form-control input-sm input-group-addon">
+                                                {{ form.edit_ARP_tpa.label }}
+                                                &nbsp;
+                                                {{ form.edit_ARP_tpa }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                <header>
+                                <h5 > IP Fields
+                                    <input type="checkbox" id="edit_ip_fields" name="edit_ip_fields" value="edit_ip_fields">
+                                </h5>
+                                </header>
+                                <div class="row ">
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_IP_src.label }}
+                                            &nbsp;
+                                            {{ form.edit_IP_src }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_IP_dst.label }}
+                                            &nbsp;
+                                            {{ form.edit_IP_dst }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_IP_id.label }}
+                                            &nbsp;
+                                            {{ form.edit_IP_id }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_IP_hl.label }}
+                                            &nbsp;
+                                            {{ form.edit_IP_hl }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_IP_df.label }}
+                                            &nbsp;
+                                            {{ form.edit_IP_df }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_IP_len.label }}
+                                            &nbsp;
+                                            {{ form.edit_IP_len }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_IP_mf.label }}
+                                            &nbsp;
+                                            {{ form.edit_IP_mf }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_IP_off.label }}
+                                            &nbsp;
+                                            {{ form.edit_IP_off }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_IP_offset.label }}
+                                            &nbsp;
+                                            {{ form.edit_IP_offset }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_IP_opts.label }}
+                                            &nbsp;
+                                            {{ form.edit_IP_opts }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_IP_p.label }}
+                                            &nbsp;
+                                            {{ form.edit_IP_p }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_IP_rf.label }}
+                                            &nbsp;
+                                            {{ form.edit_IP_rf }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_IP_sum.label }}
+                                            &nbsp;
+                                            {{ form.edit_IP_sum }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_IP_tos.label }}
+                                            &nbsp;
+                                            {{ form.edit_IP_tos }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_IP_ttl.label }}
+                                            &nbsp;
+                                            {{ form.edit_IP_ttl }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-md-4">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_IP_v.label }}
+                                            &nbsp;
+                                            {{ form.edit_IP_v }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <header>
+                                <h5 > ICMP Fields
+                                    <input type="checkbox" id="edit_icmp_fields" name="edit_icmp_fields" value="edit_icmp_fields">
+                                </h5>
+                                </header>
+                                <div class="row ">
+                                    <div class="col-md-3">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_ICMP_type.label }}
+                                            &nbsp;
+                                            {{ form.edit_ICMP_type }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_ICMP_code.label }}
+                                            &nbsp;
+                                            {{ form.edit_ICMP_code }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_ICMP_sum.label }}
+                                            &nbsp;
+                                            {{ form.edit_ICMP_sum }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <header>
+                                <h5> TCP Fields
+                                    <input type="checkbox" id="edit_tcp_fields" name="edit_tcp_fields" value="edit_tcp_fields">
+                                </h5>
+                                </header>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_TCP_sport.label }}
+                                            &nbsp;
+                                            {{ form.edit_TCP_sport }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_TCP_dport.label }}
+                                            &nbsp;
+                                            {{ form.edit_TCP_dport }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_TCP_ack.label }}
+                                            &nbsp;
+                                            {{ form.edit_TCP_ack }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_TCP_flags.label }}
+                                            &nbsp;
+                                            {{ form.edit_TCP_flags }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_TCP_off.label }}
+                                            &nbsp;
+                                            {{ form.edit_TCP_off }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_TCP_opts.label }}
+                                            &nbsp;
+                                            {{ form.edit_TCP_opts }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_TCP_seq.label }}
+                                            &nbsp;
+                                            {{ form.edit_TCP_seq }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_TCP_sum.label }}
+                                            &nbsp;
+                                            {{ form.edit_TCP_sum }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_TCP_urp.label }}
+                                            &nbsp;
+                                            {{ form.edit_TCP_urp }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-md-4">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_TCP_win.label }}
+                                            &nbsp;
+                                            {{ form.edit_TCP_win }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <header>
+                                <h5> UDP Fields
+                                    <input type="checkbox" id="edit_udp_fields" name="edit_udp_fields" value="edit_udp_fields">
+                                </h5>
+                                </header>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_UDP_sport.label }}
+                                            &nbsp;
+                                            {{ form.edit_UDP_sport }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_UDP_dport.label }}
+                                            &nbsp;
+                                            {{ form.edit_UDP_dport }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_UDP_sum.label }}
+                                            &nbsp;
+                                            {{ form.edit_UDP_sum }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <span class="form-control input-sm input-group-addon">
+                                            {{ form.edit_UDP_ulen.label }}
+                                            &nbsp;
+                                            {{ form.edit_UDP_ulen }}
+                                        </span>
+                                    </div>
+                                </div>
+                                    <header>
+                                    <h5> Payload Fields (TCP/UDP/ICMP)
+                                        <input type="checkbox" id="edit_payload_fields" name="edit_payload_fields" value="edit_payload_fields">
+                                    </h5>
+                                    </header>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <span class="form-control input-sm input-group-addon">
+                                                {{ form.edit_PAYLOAD_len.label }}
+                                                &nbsp;
+                                                {{ form.edit_PAYLOAD_len }}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <span class="form-control input-sm input-group-addon">
+                                                {{ form.edit_PAYLOAD_raw.label }}
+                                                &nbsp;
+                                                {{ form.edit_PAYLOAD_raw }}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <span class="form-control input-sm input-group-addon">
+                                                {{ form.edit_PAYLOAD_hex.label }}
+                                                &nbsp;
+                                                {{ form.edit_PAYLOAD_hex }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <header>
+                                    <h5> Extra Fields
+                                        <input type="checkbox" id="edit_extra_fields" name="edit_extra_fields" value="edit_extra_fields">
+                                    </h5>
+                                    </header>
+                                    <div class="row">       
+                                        <div class="col-md-4">
+                                            <span class="form-control input-sm input-group-addon">
+                                                {{ form.edit_timestamp.label }}
+                                                &nbsp;
+                                                {{ form.edit_timestamp }}
+                                            </span>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="evaluationmethods" > <h4><i class="fa fa-bar-chart-o"></i> Evaluation Methods</h4></label>
+                            <div class="input-group" style="width:100%;">    
+                                <div id="edit_basic_evaluation_div">                   
+                                    <header>
+                                    <h5 > Basic Evaluation <small> (TP=True Positive| FN=False Negative| TN=True Negative| FP= False Positive)</small>
+                                        <input type="checkbox" id="edit_basic_evaluation" name="edit_basic_evaluation" value="edit_basic_evaluation">
+                                    </h5>
+                                    </header>
+                                    <div class="row ">
+                                        <div class="col-md-3">
+                                            <span data-toggle="tooltip" title="(TP+TN)/ (TP+FN+TN+FP)" class="form-control input-sm input-group-addon">
+                                                <i class="glyphicon glyphicon-question-sign"></i>
+                                                {{ form.edit_accuracy.label }}
+                                                &nbsp;
+                                                {{ form.edit_accuracy }}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <span data-toggle="tooltip" title="(TP)/ (TP+FP) " class="form-control input-sm input-group-addon">
+                                                <i class="glyphicon glyphicon-question-sign"></i>
+                                                {{ form.edit_precision.label }}
+                                                &nbsp;
+                                                {{ form.edit_precision }}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <span data-toggle="tooltip" title="(TP)/ (TP+FN)" class="form-control input-sm input-group-addon">
+                                                <i class="glyphicon glyphicon-question-sign"></i>
+                                                {{ form.edit_recall.label }}
+                                                &nbsp;
+                                                {{ form.edit_recall }}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <span data-toggle="tooltip" title="2* ( (Precision*Recall)/ (Precision+Recall) )" class="form-control input-sm input-group-addon">
+                                                <i class="glyphicon glyphicon-question-sign"></i>
+                                                {{ form.edit_f_score.label }}
+                                                &nbsp;
+                                                {{ form.edit_f_score }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-md-3">
+                                            <span data-toggle="tooltip" title="(TN)/ (TN+FP)" class="form-control input-sm input-group-addon">
+                                                <i class="glyphicon glyphicon-question-sign"></i>
+                                                {{ form.edit_specificity.label }}
+                                                &nbsp;
+                                                {{ form.edit_specificity }}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <span data-toggle="tooltip" title="(FP)/ (TN+FP)" class="form-control input-sm input-group-addon">
+                                                <i class="glyphicon glyphicon-question-sign"></i>
+                                                {{ form.edit_false_positive_rate.label }}
+                                                &nbsp;
+                                                {{ form.edit_false_positive_rate }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>  
+                                <header>
+                                <h5 > Advanced Evaluation
+                                    <input type="checkbox" id="edit_advanced_evaluation" name="edit_advanced_evaluation" value="edit_advanced_evaluation">
+                                </h5>
+                                </header>
+                                <div class="row ">
+                                    <div class="col-md-6">
+                                        <span data-toggle="tooltip" title="Transforms the columns into uncorrelated variables, scale the columns to make their variance equal to 1 and, nally, calculates the Euclidean distance." class="form-control input-sm input-group-addon">
+                                            <i class="glyphicon glyphicon-question-sign"></i>
+                                            {{ form.edit_mahalanobis.label }}
+                                            &nbsp;
+                                            {{ form.edit_mahalanobis }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div id="edit_supervised_advanced_evaluation_div">
+
+                                            <span data-toggle="tooltip" title="(1/n) Sum{n, i=1} ( yi - avg(yi) )^2" class="form-control input-sm input-group-addon">
+                                                <i class="glyphicon glyphicon-question-sign"></i>
+                                                {{ form.edit_mse.label }}
+                                                &nbsp;
+                                                {{ form.edit_mse }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="edit_plot_evaluation_div">
+                                    <header>
+                                    <h5 > Plot Evaluation
+                                        <input type="checkbox" id="edit_plot_evaluation" name="edit_plot_evaluation" value="edit_plot_evaluation">
+                                    </h5>
+                                    </header>
+                                    <div class="row ">
+                                        <div class="col-md-6">
+                                            <span data-toggle="tooltip" title="Plotting the true positive rate, also known as recall, against the false positive rate at various threshold settings." class="form-control input-sm input-group-addon">
+                                                <i class="glyphicon glyphicon-question-sign"></i>
+                                                {{ form.edit_roc.label }}
+                                                &nbsp;
+                                                {{ form.edit_roc }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" style="width:100%;">   
+                                <div class="row ">
+                                    <div class="col-md-8">
+                                        <button type="submit" name="submit_edit_plugin" class="btn btn-lg btn-warning">
+                                            <span class="small-circle"><i class="glyphicon glyphicon-pencil"></i></span>
+                                            <small>Update Plug-in</small>
+                                        </button>
+                                        <button type="submit" name="submit_edit_plugin_train" class="btn btn-lg btn-warning">
+                                            <span class="small-circle"><i class="glyphicon glyphicon-pencil"></i></span>
+                                            <small>Update and Train Plug-in</small>
+                                        </button>
+                                        <button type="submit" name="submit_remove_plugin" class="btn btn-lg btn-danger">
+                                            <span class="small-circle"><i class="glyphicon glyphicon-minus-sign"></i></span>
+                                            <small>Delete Plug-in</small>
+                                        </button>
+                                        <button type="submit" name="plugin_selected" id="select_plugin" formnovalidate class="hide-submit"> 
+                                        </button>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    </div>
+</div>
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <!-- page application js [EDITED]-->
+    <script src="/static/assets/js/plugin.js"></script>
+    <!-- alert specific libs -->
+    <script src="/static/assets/lib/messenger/build/js/messenger.js"></script>
+    <script src="/static/assets/lib/messenger/build/js/messenger-theme-flat.js"></script>
+    <!-- other alert libs -->
+    <script src="/static/assets/lib/backbone/backbone.js"></script>
+    <script src="/static/assets/lib/messenger/docs/welcome/javascripts/location-sel.js"></script>
+    <!-- SocketIO: alert-->
+    <script src="/static/assets/socket.io/dist/socket.io.js"> </script>
+    <!-- Alerts-->
+    <script src="/static/assets/js/alerts.js"></script>
+{% endblock javascripts %}
